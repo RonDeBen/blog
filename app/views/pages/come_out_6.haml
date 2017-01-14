@@ -1,0 +1,34 @@
+!!!
+%html{:lang => "en-us"}
+  %head
+    %meta{:charset => "utf-8"}/
+    %meta{:content => "text/html; charset=utf-8", "http-equiv" => "Content-Type"}/
+    %title Unity WebGL Player | Come Out 6
+    %link{:href => (asset_path "TemplateData/style.css"), :rel => "stylesheet"}/
+    %link{:href => (asset_path "TemplateData/favicon.ico"), :rel => "shortcut icon"}/
+    %script{:src => (asset_path "TemplateData/UnityProgress.js")}
+  %body.template
+    %p.header
+      %span> Unity WebGL Player |
+      Come Out 6
+    .template-wrap.clear
+      %canvas#canvas.emscripten{:height => "600px", :oncontextmenu => "event.preventDefault()", :width => "960px"}
+      %br/
+      .logo
+      .fullscreen
+        %img{:alt => "Fullscreen", :height => "38", :onclick => "SetFullscreen(1);", :src => (asset_path "TemplateData/fullscreen.png"), :title => "Fullscreen", :width => "38"}/
+      .title Come Out 6
+    %p.footer
+      « created with
+      %a{:href => "http://unity3d.com/", :title => "Go to unity3d.com"} Unity
+      »
+    :javascript
+      var Module = {
+        TOTAL_MEMORY: 268435456,
+        errorhandler: null,			// arguments: err, url, line. This function must return 'true' if the error is handled, otherwise 'false'
+        compatibilitycheck: null,
+        dataUrl: asset_path ('Release/pollyanna_web.data'),
+        codeUrl: asset_path ('Release/pollyanna_web.js'),
+        memUrl: asset_path ('Release/pollyanna_web.mem'),
+      };
+    %script{:src => (asset_path "Release/UnityLoader.js")}

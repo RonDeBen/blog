@@ -1,129 +1,40 @@
-!!! Strict
-%html{:xmlns => "http://www.w3.org/1999/xhtml"}
+!!!
+%html{:lang => "en-us"}
   %head
+    %meta{:charset => "utf-8"}/
     %meta{:content => "text/html; charset=utf-8", "http-equiv" => "Content-Type"}/
-    %script{:src => "https://ssl-webplayer.unity3d.com/download_webplayer-3.x/3.0/uo/jquery.min.js", :type => "text/javascript"}
-    :javascript
-      <!--
-      var unityObjectUrl = "http://webplayer.unity3d.com/download_webplayer-3.x/3.0/uo/UnityObject2.js";
-      if (document.location.protocol == 'https:')
-      	unityObjectUrl = unityObjectUrl.replace("http://", "https://ssl-");
-      document.write('<script type="text\/javascript" src="' + unityObjectUrl + '"><\/script>');
-      -->
-    :javascript
-      <!--
-      	var config = {
-      		width: 960, 
-      		height: 600,
-      		params: { enableDebugging:"0" }
-      		
-      	};
-      	var u = new UnityObject2(config);
-
-      	jQuery(function() {
-
-      		var $missingScreen = jQuery("#unityPlayer").find(".missing");
-      		var $brokenScreen = jQuery("#unityPlayer").find(".broken");
-      		$missingScreen.hide();
-      		$brokenScreen.hide();
-      		
-      		u.observeProgress(function (progress) {
-      			switch(progress.pluginStatus) {
-      				case "broken":
-      					$brokenScreen.find("a").click(function (e) {
-      						e.stopPropagation();
-      						e.preventDefault();
-      						u.installPlugin();
-      						return false;
-      					});
-      					$brokenScreen.show();
-      				break;
-      				case "missing":
-      					$missingScreen.find("a").click(function (e) {
-      						e.stopPropagation();
-      						e.preventDefault();
-      						u.installPlugin();
-      						return false;
-      					});
-      					$missingScreen.show();
-      				break;
-      				case "installed":
-      					$missingScreen.remove();
-      				break;
-      				case "first":
-      				break;
-      			}
-      		});
-      		u.initPlugin(jQuery("#unityPlayer")[0], "#{asset_path "unLock.unity3d"}" );
-      	});
-      -->
-    :css
-      <!--
-      body {
-      	font-family: Helvetica, Verdana, Arial, sans-serif;
-      	background-color: white;
-      	color: black;
-      	text-align: center;
-      }
-      a:link, a:visited {
-      	color: #000;
-      }
-      a:active, a:hover {
-      	color: #666;
-      }
-      p.header {
-      	font-size: small;
-      }
-      p.header span {
-      	font-weight: bold;
-      }
-      p.footer {
-      	font-size: x-small;
-      }
-      div.content {
-      	margin: auto;
-      	width: 960px;
-      }
-      div.broken,
-      div.missing {
-      	margin: auto;
-      	position: relative;
-      	top: 50%;
-      	width: 193px;
-      }
-      div.broken a,
-      div.missing a {
-      	height: 63px;
-      	position: relative;
-      	top: -31px;
-      }
-      div.broken img,
-      div.missing img {
-      	border-width: 0px;
-      }
-      div.broken {
-      	display: none;
-      }
-      div#unityPlayer {
-      	cursor: default;
-      	height: 600px;
-      	width: 960px;
-      }
-      -->
-  %body
+    %title Unity WebGL Player | unLock
+    %link{:href => asset_path('TemplateData/style.css'), :rel => "stylesheet"}/
+    %link{:href => asset_path('TemplateData/favicon.ico'), :rel => "shortcut icon"}/
+    %script{:src => asset_path('TemplateData/UnityProgress.js')}
+  %body.template
     %p.header
-      %span> unLock
-    .content
-      #unityPlayer
-        .missing
-          %a{:href => "http://unity3d.com/webplayer/", :title => "Unity Web Player. Install now!"}
-            %img{:alt => "Unity Web Player. Install now!", :height => "63", :src => "http://webplayer.unity3d.com/installation/getunity.png", :width => "193"}/
-        .broken
-          %a{:href => "http://unity3d.com/webplayer/", :title => "Unity Web Player. Install now! Restart your browser after install."}
-            %img{:alt => "Unity Web Player. Install now! Restart your browser after install.", :height => "63", :src => "http://webplayer.unity3d.com/installation/getunityrestart.png", :width => "193"}/
-%footer
-  .big_font= "- Drag your mouse between nodes to draw a shape, then hit encrypt"
-  .big_font= "- Then try to solve the shape by starting at the gold node and ending on the silver"
-  .big_font= "(Intended for two players)"
-  .big_font= "Normally you have 1 minute to try to solve the shape, but the web version is bugging out"
-  .p= "Ask me about the hardest shape to solve, and what the longest trail is!!"
+      %span> Unity WebGL Player |
+      unLock
+    .template-wrap.clear
+      %canvas#canvas.emscripten{:height => "600px", :oncontextmenu => "event.preventDefault()", :width => "960px"}
+      %br/
+      .logo
+      .fullscreen
+        %img{:alt => "Fullscreen", :height => "38", :onclick => "SetFullscreen(1);", :src => asset_path("TemplateData/fullscreen.png"), :title => "Fullscreen", :width => "38"}/
+      .title unLock
+    %p.footer
+      « created with
+      %a{:href => "http://unity3d.com/", :title => "Go to unity3d.com"} Unity
+      »
+    :javascript
+      var Module = {
+        TOTAL_MEMORY: 268435456,
+        errorhandler: null,     // arguments: err, url, line. This function must return 'true' if the error is handled, otherwise 'false'
+        compatibilitycheck: null,
+
+        dataUrl: asset_path('unLock/unLock_html5.data'),
+        codeUrl: asset_path('unLock/unLock_html5.js'),
+        memUrl: asset_path('unLock/unLock_html5.mem'),
+
+        / dataUrl: "#{asset_path('some_image.jpgunLock/unLock_html5.data')},
+        / codeUrl: "#{asset_path('some_image.jpgunLock/unLock_html5.js')},
+        / memUrl: "#{asset_path('some_image.jpgunLock/unLock_html5.mem')},
+        
+      };
+    %script{:src => asset_path('unLock/UnityLoader')}

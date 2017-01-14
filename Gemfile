@@ -26,6 +26,8 @@ gem 'sdoc', '~> 0.4.0', group: :doc
 gem 'haml'
 gem 'haml-rails'
 
+gem 'js_assets'
+
 gem 'rails_12factor'
 
 group :development, :test do

@@ -10,4 +10,7 @@ class PagesController < ApplicationController
 
 	def koffee
 	end
+
+	def come_out_6
+	end
 end
